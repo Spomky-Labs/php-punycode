@@ -16,6 +16,8 @@ Punycode
 
 A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA).
 
+Original code from https://github.com/true/php-punycode
+
 # The Release Process
 
 The release process [is described here](doc/Release.md).
