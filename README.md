@@ -1,4 +1,5 @@
-# Punycode
+Punycode
+========
 
 [![Build Status](https://travis-ci.org/Spomky-Labs/php-punycode.svg)](https://travis-ci.org/Spomky-Labs/php-punycode)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Spomky-Labs/php-punycode/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Spomky-Labs/php-punycode/?branch=master)
@@ -15,38 +16,43 @@
 
 A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA).
 
-## Install
+# The Release Process
 
+The release process [is described here](doc/Release.md).
+
+# Prerequisites
+
+This library needs at least ![PHP 5.6+](https://img.shields.io/badge/PHP-5.6%2B-ff69b4.svg).
+
+It has been successfully tested using `PHP 5.6`, `PHP 7` and `HHVM`.
+
+# Installation
+
+The preferred way to install this library is to rely on Composer:
+
+```sh
+composer require "spomky-labs/php-punycode" "~3.0"
 ```
-composer require spomky-labs/php-punycode:~2.0
-```
 
-
-## Usage
+# How to use
 
 ```php
 <?php
 
 // Import Punycode
-use TrueBV\Punycode;
+use SpomkyLabs\Punycode;
 
-$Punycode = new Punycode();
-var_dump($Punycode->encode('renangonçalves.com'));
+var_dump(Punycode::encode('renangonçalves.com'));
 // outputs: xn--renangonalves-pgb.com
 
-var_dump($Punycode->decode('xn--renangonalves-pgb.com'));
+var_dump(Punycode::decode('xn--renangonalves-pgb.com'));
 // outputs: renangonçalves.com
 ```
 
+# Contributing
 
-## FAQ
+Requests for new features, bug fixed and all other ideas to make this library useful are welcome. [Please follow these best practices](doc/Contributing.md).
 
-### 1. What is this library for?
+# Licence
 
-This library converts a Unicode encoded domain name to a IDNA ASCII form and vice-versa.
-
-
-### 2. Why should I use this instead of [PHP's IDN Functions](http://php.net/manual/en/ref.intl.idn.php)?
-
-If you can compile the needed dependencies (intl, libidn) there is not much difference.
-But if you want to write portable code between hosts (including Windows and Mac OS), or can't install PECL extensions, this is the right library for you.
+This library is release under [MIT licence](LICENSE.txt).
