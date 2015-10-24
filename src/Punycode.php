@@ -57,6 +57,7 @@ class Punycode
      */
     public static function encode($input, $encoding = 'UTF-8')
     {
+        $input = mb_strtolower($input, $encoding);
         $parts = explode('.', $input);
         foreach ($parts as &$part) {
             $part = self::encodePart($part, $encoding);
@@ -151,7 +152,7 @@ class Punycode
                 continue;
             }
 
-            $part = substr($part, strlen(static::PREFIX));
+            $part = substr($part, mb_strlen(static::PREFIX, $encoding));
             $part = self::decodePart($part, $encoding);
         }
 
@@ -173,15 +174,15 @@ class Punycode
         $bias = static::INITIAL_BIAS;
         $output = '';
 
-        $pos = strrpos($input, static::DELIMITER);
+        $pos = mb_strrpos($input, static::DELIMITER, null, $encoding);
         if ($pos !== false) {
-            $output = substr($input, 0, $pos++);
+            $output = mb_substr($input, 0, $pos++, $encoding);
         } else {
             $pos = 0;
         }
 
-        $outputLength = strlen($output);
-        $inputLength = strlen($input);
+        $outputLength = mb_strlen($output, $encoding);
+        $inputLength = mb_strlen($input, $encoding);
         while ($pos < $inputLength) {
             $oldi = $i;
             $w = 1;
