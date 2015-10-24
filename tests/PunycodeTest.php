@@ -1,11 +1,11 @@
 <?php
-namespace TrueBV;
+
+use SpomkyLabs\Punycode;
 
 class PunycodeTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * Test encoding Punycode
+     * Test encoding Punycode.
      *
      * @param string $decoded Decoded domain
      * @param string $encoded Encoded domain
@@ -13,13 +13,12 @@ class PunycodeTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncode($decoded, $encoded)
     {
-        $Punycode = new Punycode();
-        $result = $Punycode->encode($decoded);
+        $result = Punycode::encode($decoded);
         $this->assertEquals($encoded, $result);
     }
 
     /**
-     * Test decoding Punycode
+     * Test decoding Punycode.
      *
      * @param string $decoded Decoded domain
      * @param string $encoded Encoded domain
@@ -27,13 +26,12 @@ class PunycodeTest extends \PHPUnit_Framework_TestCase
      */
     public function testDecode($decoded, $encoded)
     {
-        $Punycode = new Punycode();
-        $result = $Punycode->decode($encoded);
+        $result = Punycode::decode($encoded);
         $this->assertEquals($decoded, $result);
     }
 
     /**
-     * Provide domain names containing the decoded and encoded names
+     * Provide domain names containing the decoded and encoded names.
      *
      * @return array
      */

@@ -1,30 +1,29 @@
 <?php
-namespace TrueBV;
+
+namespace SpomkyLabs;
 
 /**
- * Punycode implementation as described in RFC 3492
+ * Punycode implementation as described in RFC 3492.
  *
  * @link http://tools.ietf.org/html/rfc3492
  */
 class Punycode
 {
-
     /**
-     * Bootstring parameter values
-     *
+     * Bootstring parameter values.
      */
-    const BASE         = 36;
-    const TMIN         = 1;
-    const TMAX         = 26;
-    const SKEW         = 38;
-    const DAMP         = 700;
+    const BASE = 36;
+    const TMIN = 1;
+    const TMAX = 26;
+    const SKEW = 38;
+    const DAMP = 700;
     const INITIAL_BIAS = 72;
-    const INITIAL_N    = 128;
-    const PREFIX       = 'xn--';
-    const DELIMITER    = '-';
+    const INITIAL_N = 128;
+    const PREFIX = 'xn--';
+    const DELIMITER = '-';
 
     /**
-     * Encode table
+     * Encode table.
      *
      * @param array
      */
@@ -35,61 +34,48 @@ class Punycode
     );
 
     /**
-     * Decode table
+     * Decode table.
      *
      * @param array
      */
     protected static $decodeTable = array(
-        'a' =>  0, 'b' =>  1, 'c' =>  2, 'd' =>  3, 'e' =>  4, 'f' =>  5,
-        'g' =>  6, 'h' =>  7, 'i' =>  8, 'j' =>  9, 'k' => 10, 'l' => 11,
+        'a' => 0, 'b' => 1, 'c' => 2, 'd' => 3, 'e' => 4, 'f' => 5,
+        'g' => 6, 'h' => 7, 'i' => 8, 'j' => 9, 'k' => 10, 'l' => 11,
         'm' => 12, 'n' => 13, 'o' => 14, 'p' => 15, 'q' => 16, 'r' => 17,
         's' => 18, 't' => 19, 'u' => 20, 'v' => 21, 'w' => 22, 'x' => 23,
         'y' => 24, 'z' => 25, '0' => 26, '1' => 27, '2' => 28, '3' => 29,
-        '4' => 30, '5' => 31, '6' => 32, '7' => 33, '8' => 34, '9' => 35
+        '4' => 30, '5' => 31, '6' => 32, '7' => 33, '8' => 34, '9' => 35,
     );
 
     /**
-     * Character encoding
+     * Encode a domain to its Punycode version.
      *
-     * @param string
-     */
-    protected $encoding;
-
-    /**
-     * Constructor
-     *
+     * @param string $input    Domain name in Unicode to be encoded
      * @param string $encoding Character encoding
-     */
-    public function __construct($encoding = 'UTF-8')
-    {
-        $this->encoding = $encoding;
-    }
-
-    /**
-     * Encode a domain to its Punycode version
      *
-     * @param string $input Domain name in Unicode to be encoded
      * @return string Punycode representation in ASCII
      */
-    public function encode($input)
+    public static function encode($input, $encoding = 'UTF-8')
     {
         $parts = explode('.', $input);
         foreach ($parts as &$part) {
-            $part = $this->encodePart($part);
+            $part = self::encodePart($part, $encoding);
         }
 
         return implode('.', $parts);
     }
 
     /**
-     * Encode a part of a domain name, such as tld, to its Punycode version
+     * Encode a part of a domain name, such as tld, to its Punycode version.
      *
-     * @param string $input Part of a domain name
+     * @param string $input    Part of a domain name
+     * @param string $encoding Character encoding
+     *
      * @return string Punycode representation of a domain part
      */
-    protected function encodePart($input)
+    protected static function encodePart($input, $encoding)
     {
-        $codePoints = $this->listCodePoints($input);
+        $codePoints = self::listCodePoints($input, $encoding);
 
         $n = static::INITIAL_N;
         $bias = static::INITIAL_BIAS;
@@ -98,7 +84,7 @@ class Punycode
 
         $output = '';
         foreach ($codePoints['basic'] as $code) {
-            $output .= $this->codePointToChar($code);
+            $output .= self::codePointToChar($code);
         }
         if ($input === $output) {
             return $output;
@@ -111,7 +97,7 @@ class Punycode
         sort($codePoints['nonBasic']);
 
         $i = 0;
-        $length = mb_strlen($input, $this->encoding);
+        $length = mb_strlen($input, $encoding);
         while ($h < $length) {
             $m = $codePoints['nonBasic'][$i++];
             $delta = $delta + ($m - $n) * ($h + 1);
@@ -119,12 +105,12 @@ class Punycode
 
             foreach ($codePoints['all'] as $c) {
                 if ($c < $n || $c < static::INITIAL_N) {
-                    $delta++;
+                    ++$delta;
                 }
                 if ($c === $n) {
                     $q = $delta;
                     for ($k = static::BASE;; $k += static::BASE) {
-                        $t = $this->calculateThreshold($k, $bias);
+                        $t = self::calculateThreshold($k, $bias);
                         if ($q < $t) {
                             break;
                         }
@@ -136,26 +122,28 @@ class Punycode
                     }
 
                     $output .= static::$encodeTable[$q];
-                    $bias = $this->adapt($delta, $h + 1, ($h === $b));
+                    $bias = self::adapt($delta, $h + 1, ($h === $b));
                     $delta = 0;
-                    $h++;
+                    ++$h;
                 }
             }
 
-            $delta++;
-            $n++;
+            ++$delta;
+            ++$n;
         }
 
-        return static::PREFIX . $output;
+        return static::PREFIX.$output;
     }
 
     /**
-     * Decode a Punycode domain name to its Unicode counterpart
+     * Decode a Punycode domain name to its Unicode counterpart.
      *
      * @param string $input Domain name in Punycode
+     * @param string $encoding Character encoding
+     *
      * @return string Unicode domain name
      */
-    public function decode($input)
+    public static function decode($input, $encoding = 'UTF-8')
     {
         $parts = explode('.', $input);
         foreach ($parts as &$part) {
@@ -164,19 +152,21 @@ class Punycode
             }
 
             $part = substr($part, strlen(static::PREFIX));
-            $part = $this->decodePart($part);
+            $part = self::decodePart($part, $encoding);
         }
 
         return implode('.', $parts);
     }
 
     /**
-     * Decode a part of domain name, such as tld
+     * Decode a part of domain name, such as tld.
      *
-     * @param string $input Part of a domain name
+     * @param string $input    Part of a domain name
+     * @param string $encoding Character encoding
+     *
      * @return string Unicode domain part
      */
-    protected function decodePart($input)
+    protected static function decodePart($input, $encoding)
     {
         $n = static::INITIAL_N;
         $i = 0;
@@ -199,7 +189,7 @@ class Punycode
             for ($k = static::BASE;; $k += static::BASE) {
                 $digit = static::$decodeTable[$input[$pos++]];
                 $i = $i + ($digit * $w);
-                $t = $this->calculateThreshold($k, $bias);
+                $t = self::calculateThreshold($k, $bias);
 
                 if ($digit < $t) {
                     break;
@@ -208,43 +198,46 @@ class Punycode
                 $w = $w * (static::BASE - $t);
             }
 
-            $bias = $this->adapt($i - $oldi, ++$outputLength, ($oldi === 0));
+            $bias = self::adapt($i - $oldi, ++$outputLength, ($oldi === 0));
             $n = $n + (int) ($i / $outputLength);
             $i = $i % ($outputLength);
-            $output = mb_substr($output, 0, $i, $this->encoding) . $this->codePointToChar($n) . mb_substr($output, $i, $outputLength - 1, $this->encoding);
+            $output = mb_substr($output, 0, $i, $encoding).self::codePointToChar($n).mb_substr($output, $i, $outputLength - 1, $encoding);
 
-            $i++;
+            ++$i;
         }
 
         return $output;
     }
 
     /**
-     * Calculate the bias threshold to fall between TMIN and TMAX
+     * Calculate the bias threshold to fall between TMIN and TMAX.
      *
-     * @param integer $k
-     * @param integer $bias
-     * @return integer
+     * @param int $k
+     * @param int $bias
+     *
+     * @return int
      */
-    protected function calculateThreshold($k, $bias)
+    protected static function calculateThreshold($k, $bias)
     {
         if ($k <= $bias + static::TMIN) {
             return static::TMIN;
         } elseif ($k >= $bias + static::TMAX) {
             return static::TMAX;
         }
+
         return $k - $bias;
     }
 
     /**
-     * Bias adaptation
+     * Bias adaptation.
      *
-     * @param integer $delta
-     * @param integer $numPoints
-     * @param boolean $firstTime
-     * @return integer
+     * @param int  $delta
+     * @param int  $numPoints
+     * @param bool $firstTime
+     *
+     * @return int
      */
-    protected function adapt($delta, $numPoints, $firstTime)
+    protected static function adapt($delta, $numPoints, $firstTime)
     {
         $delta = (int) (
             ($firstTime)
@@ -264,23 +257,25 @@ class Punycode
     }
 
     /**
-     * List code points for a given input
+     * List code points for a given input.
      *
      * @param string $input
+     * @param string $encoding
+     *
      * @return array Multi-dimension array with basic, non-basic and aggregated code points
      */
-    protected function listCodePoints($input)
+    protected static function listCodePoints($input, $encoding)
     {
         $codePoints = array(
-            'all'      => array(),
-            'basic'    => array(),
+            'all' => array(),
+            'basic' => array(),
             'nonBasic' => array(),
         );
 
-        $length = mb_strlen($input, $this->encoding);
-        for ($i = 0; $i < $length; $i++) {
-            $char = mb_substr($input, $i, 1, $this->encoding);
-            $code = $this->charToCodePoint($char);
+        $length = mb_strlen($input, $encoding);
+        for ($i = 0; $i < $length; ++$i) {
+            $char = mb_substr($input, $i, 1, $encoding);
+            $code = self::charToCodePoint($char);
             if ($code < 128) {
                 $codePoints['all'][] = $codePoints['basic'][] = $code;
             } else {
@@ -292,12 +287,13 @@ class Punycode
     }
 
     /**
-     * Convert a single or multi-byte character to its code point
+     * Convert a single or multi-byte character to its code point.
      *
      * @param string $char
-     * @return integer
+     *
+     * @return int
      */
-    protected function charToCodePoint($char)
+    protected static function charToCodePoint($char)
     {
         $code = ord($char[0]);
         if ($code < 128) {
@@ -312,21 +308,22 @@ class Punycode
     }
 
     /**
-     * Convert a code point to its single or multi-byte character
+     * Convert a code point to its single or multi-byte character.
      *
-     * @param integer $code
+     * @param int $code
+     *
      * @return string
      */
-    protected function codePointToChar($code)
+    protected static function codePointToChar($code)
     {
         if ($code <= 0x7F) {
             return chr($code);
         } elseif ($code <= 0x7FF) {
-            return chr(($code >> 6) + 192) . chr(($code & 63) + 128);
+            return chr(($code >> 6) + 192).chr(($code & 63) + 128);
         } elseif ($code <= 0xFFFF) {
-            return chr(($code >> 12) + 224) . chr((($code >> 6) & 63) + 128) . chr(($code & 63) + 128);
+            return chr(($code >> 12) + 224).chr((($code >> 6) & 63) + 128).chr(($code & 63) + 128);
         } else {
-            return chr(($code >> 18) + 240) . chr((($code >> 12) & 63) + 128) . chr((($code >> 6) & 63) + 128) . chr(($code & 63) + 128);
+            return chr(($code >> 18) + 240).chr((($code >> 12) & 63) + 128).chr((($code >> 6) & 63) + 128).chr(($code & 63) + 128);
         }
     }
 }

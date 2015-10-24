@@ -1,17 +1,23 @@
 # Punycode
 
 [![Build Status](https://secure.travis-ci.org/true/php-punycode.png?branch=master)](http://travis-ci.org/true/php-punycode)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/true/php-punycode/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/true/php-punycode/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Spomky-Labs/php-punycode/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Spomky-Labs/php-punycode/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/true/php-punycode/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/true/php-punycode/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/true/punycode/version.png)](https://packagist.org/packages/true/punycode)
+
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/d59a9463-ed65-4304-a764-04f62d3fd58c/big.png)](https://insight.sensiolabs.com/projects/d59a9463-ed65-4304-a764-04f62d3fd58c)
+
+[![Latest Stable Version](https://poser.pugx.org/spomky-labs/php-punycode/v/stable.png)](https://packagist.org/packages/spomky-labs/php-punycode)
+[![Total Downloads](https://poser.pugx.org/spomky-labs/php-punycode/downloads.png)](https://packagist.org/packages/spomky-labs/php-punycode)
+[![Latest Unstable Version](https://poser.pugx.org/spomky-labs/php-punycode/v/unstable.png)](https://packagist.org/packages/spomky-labs/php-punycode)
+[![License](https://poser.pugx.org/spomky-labs/php-punycode/license.png)](https://packagist.org/packages/spomky-labs/php-punycode)
+
 
 A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA).
-
 
 ## Install
 
 ```
-composer require true/punycode:~2.0
+composer require spomky-labs/php-punycode:~2.0
 ```
 
 
