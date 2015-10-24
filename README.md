@@ -1,8 +1,9 @@
 # Punycode
 
-[![Build Status](https://secure.travis-ci.org/true/php-punycode.png?branch=master)](http://travis-ci.org/true/php-punycode)
+[![Build Status](https://travis-ci.org/Spomky-Labs/php-punycode.svg)](https://travis-ci.org/Spomky-Labs/php-punycode)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Spomky-Labs/php-punycode/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Spomky-Labs/php-punycode/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/true/php-punycode/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/true/php-punycode/?branch=master)
+
+[![Coverage Status](https://coveralls.io/repos/Spomky-Labs/php-punycode/badge.svg?branch=master&service=github)](https://coveralls.io/github/Spomky-Labs/php-punycode?branch=master)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/d59a9463-ed65-4304-a764-04f62d3fd58c/big.png)](https://insight.sensiolabs.com/projects/d59a9463-ed65-4304-a764-04f62d3fd58c)
 
