@@ -7,7 +7,7 @@ namespace SpomkyLabs;
  *
  * @link http://tools.ietf.org/html/rfc3492
  */
-class Punycode
+final class Punycode
 {
     /**
      * Bootstring parameter values.
@@ -27,7 +27,7 @@ class Punycode
      *
      * @param array
      */
-    protected static $encodeTable = [
+    private static $encodeTable = [
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
         'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
         'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -38,7 +38,7 @@ class Punycode
      *
      * @param array
      */
-    protected static $decodeTable = [
+    private static $decodeTable = [
         'a' => 0, 'b' => 1, 'c' => 2, 'd' => 3, 'e' => 4, 'f' => 5,
         'g' => 6, 'h' => 7, 'i' => 8, 'j' => 9, 'k' => 10, 'l' => 11,
         'm' => 12, 'n' => 13, 'o' => 14, 'p' => 15, 'q' => 16, 'r' => 17,
@@ -74,7 +74,7 @@ class Punycode
      *
      * @return string Punycode representation of a domain part
      */
-    protected static function encodePart($input, $encoding)
+    private static function encodePart($input, $encoding)
     {
         $codePoints = self::listCodePoints($input, $encoding);
 
@@ -167,7 +167,7 @@ class Punycode
      *
      * @return string Unicode domain part
      */
-    protected static function decodePart($input, $encoding)
+    private static function decodePart($input, $encoding)
     {
         $n = static::INITIAL_N;
         $i = 0;
@@ -218,7 +218,7 @@ class Punycode
      *
      * @return int
      */
-    protected static function calculateThreshold($k, $bias)
+    private static function calculateThreshold($k, $bias)
     {
         if ($k <= $bias + static::TMIN) {
             return static::TMIN;
@@ -238,7 +238,7 @@ class Punycode
      *
      * @return int
      */
-    protected static function adapt($delta, $numPoints, $firstTime)
+    private static function adapt($delta, $numPoints, $firstTime)
     {
         $delta = (int) (
             ($firstTime)
@@ -265,7 +265,7 @@ class Punycode
      *
      * @return array Multi-dimension array with basic, non-basic and aggregated code points
      */
-    protected static function listCodePoints($input, $encoding)
+    private static function listCodePoints($input, $encoding)
     {
         $codePoints = [
             'all'      => [],
@@ -294,7 +294,7 @@ class Punycode
      *
      * @return int
      */
-    protected static function charToCodePoint($char)
+    private static function charToCodePoint($char)
     {
         $code = ord($char[0]);
         if ($code < 128) {
@@ -315,7 +315,7 @@ class Punycode
      *
      * @return string
      */
-    protected static function codePointToChar($code)
+    private static function codePointToChar($code)
     {
         if ($code <= 0x7F) {
             return chr($code);
