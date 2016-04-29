@@ -152,7 +152,7 @@ final class Punycode
                 continue;
             }
 
-            $part = substr($part, mb_strlen(static::PREFIX, $encoding));
+            $part = mb_substr($part, mb_strlen(static::PREFIX, $encoding), null, $encoding);
             $part = self::decodePart($part, $encoding);
         }
 
