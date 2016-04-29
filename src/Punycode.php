@@ -110,7 +110,7 @@ final class Punycode
                 }
                 if ($c === $n) {
                     $q = $delta;
-                    for ($k = static::BASE;; $k += static::BASE) {
+                    for ($k = static::BASE; ; $k += static::BASE) {
                         $t = self::calculateThreshold($k, $bias);
                         if ($q < $t) {
                             break;
@@ -187,7 +187,7 @@ final class Punycode
             $oldi = $i;
             $w = 1;
 
-            for ($k = static::BASE;; $k += static::BASE) {
+            for ($k = static::BASE; ; $k += static::BASE) {
                 $digit = static::$decodeTable[$input[$pos++]];
                 $i = $i + ($digit * $w);
                 $t = self::calculateThreshold($k, $bias);
