@@ -11,7 +11,7 @@ Punycode
 [![Latest Stable Version](https://poser.pugx.org/spomky-labs/php-punycode/v/stable.png)](https://packagist.org/packages/spomky-labs/php-punycode)
 [![Total Downloads](https://poser.pugx.org/spomky-labs/php-punycode/downloads.png)](https://packagist.org/packages/spomky-labs/php-punycode)
 [![Latest Unstable Version](https://poser.pugx.org/spomky-labs/php-punycode/v/unstable.png)](https://packagist.org/packages/spomky-labs/php-punycode)
-[![License](https://poser.pugx.org/spomky-labs/php-punycode/license.png)](https://packagist.org/packages/spomky-labs/php-punycode)
+[![License](https://poser.pugx.org/spomky-labs/php-punycode/license.png)](https://packagist.org/packages/spomky-labs/php-punycode) [![GuardRails badge](https://badges.production.guardrails.io/Spomky-Labs/php-punycode.svg)](https://www.guardrails.io)
 
 
 A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA).
